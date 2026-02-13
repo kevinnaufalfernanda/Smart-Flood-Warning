@@ -45,7 +45,7 @@
     <form method="GET" class="d-flex flex-wrap align-items-center gap-3">
         <div class="d-flex align-items-center gap-2 text-secondary">
             <i class="fas fa-calendar"></i>
-            <input type="datetime-local" name="date" class="form-control-glass py-1" value="{{ request('date') }}" style="width: 200px; font-size: 13px;">
+            <input type="date" name="date" class="form-control-glass py-1" value="{{ request('date') }}" style="width: 140px; font-size: 13px;">
         </div>
         <select name="status" class="form-control-glass py-1" style="width: 150px; font-size: 13px;">
             <option value="">Semua Status</option>
@@ -94,7 +94,9 @@
                     <td style="white-space: nowrap;">
                         <div class="d-flex flex-column">
                             <span class="fw-bold text-white" style="font-size: 13px;">{{ $r->created_at->format('d M Y') }}</span>
-                            <small class="text-muted">{{ $r->created_at->format('H:i:s') }}</small>
+                            <span class="text-cyan fw-bold" style="font-size: 12px;">
+                                <i class="far fa-clock me-1" style="font-size: 11px;"></i>{{ $r->created_at->format('H:i:s') }}
+                            </span>
                         </div>
                     </td>
                     <td>{{ $r->device->name ?? 'Unknown' }}</td>

@@ -12,9 +12,7 @@ class HistoryController extends Controller
         $query = SensorReading::with('device')->latest();
 
         if ($request->filled('date')) {
-            $start = \Carbon\Carbon::parse($request->date);
-            $end = $start->copy()->endOfDay();
-            $query->whereBetween('created_at', [$start, $end]);
+            $query->whereDate('created_at', $request->date);
         }
 
         if ($request->filled('status')) {
