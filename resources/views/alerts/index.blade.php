@@ -87,7 +87,7 @@
                     <i class="fas fa-filter me-1"></i> Filter
                 </button>
             @else
-                <button type="submit" class="btn btn-sm btn-cyber ms-auto">
+                <button type="submit" id="filterBtn" class="btn btn-sm btn-cyber ms-auto" style="display: none;">
                     <i class="fas fa-filter me-1"></i> Filter
                 </button>
             @endif
@@ -196,6 +196,23 @@
         // Update active state
         el.closest('ul').querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
         el.classList.add('active');
+
+        // Show/hide filter button based on whether any filter is selected
+        toggleFilterButton();
+    }
+
+    function toggleFilterButton() {
+        const filterBtn = document.getElementById('filterBtn');
+        if (!filterBtn) return; // Already has active filters (server-side rendered)
+        
+        const typeVal = document.getElementById('input_type').value;
+        const statusVal = document.getElementById('input_status').value;
+        
+        if (typeVal || statusVal) {
+            filterBtn.style.display = '';
+        } else {
+            filterBtn.style.display = 'none';
+        }
     }
 </script>
 @endpush

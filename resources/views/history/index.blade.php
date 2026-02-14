@@ -107,7 +107,7 @@
                 <i class="fas fa-filter me-1"></i> Filter
             </button>
         @else
-            <button type="submit" class="btn btn-sm btn-cyber ms-auto">
+            <button type="submit" id="filterBtn" class="btn btn-sm btn-cyber ms-auto" style="display: none;">
                 <i class="fas fa-filter me-1"></i> Filter
             </button>
         @endif
@@ -176,9 +176,19 @@
 </div>
 
 <!-- Pagination -->
-<div class="d-flex justify-content-center mt-4">
-    {{ $readings->withQueryString()->links('pagination::bootstrap-5') }}
+@if($readings->hasPages())
+<div class="d-flex align-items-center justify-content-between mt-4 flex-wrap gap-3">
+    <div style="min-width: 180px;"></div>
+    <div class="d-flex justify-content-center">
+        {{ $readings->withQueryString()->links('pagination::bootstrap-5') }}
+    </div>
+    <div class="text-end" style="min-width: 180px;">
+        <span class="text-secondary" style="font-size: 13px;">
+            Showing {{ $readings->firstItem() }} to {{ $readings->lastItem() }} of {{ $readings->total() }} results
+        </span>
+    </div>
 </div>
+@endif
 @endsection
 
 @push('scripts')
@@ -197,6 +207,28 @@
         // Update active state
         el.closest('ul').querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
         el.classList.add('active');
+
+        // Show/hide filter button
+        toggleFilterButton();
     }
+
+    function toggleFilterButton() {
+        const filterBtn = document.getElementById('filterBtn');
+        if (!filterBtn) return;
+
+        const startDate = document.querySelector('input[name="start_date"]')?.value || '';
+        const deviceId = document.getElementById('input_device_id')?.value || '';
+        const status = document.getElementById('input_status')?.value || '';
+        const sort = document.getElementById('input_sort')?.value || '';
+
+        if (startDate || deviceId || status || (sort && sort !== 'desc')) {
+            filterBtn.style.display = '';
+        } else {
+            filterBtn.style.display = 'none';
+        }
+    }
+
+    // Also listen for date input changes
+    document.querySelector('input[name="start_date"]')?.addEventListener('change', toggleFilterButton);
 </script>
 @endpush

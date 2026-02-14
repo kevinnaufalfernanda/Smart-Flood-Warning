@@ -648,6 +648,10 @@ body {
 }
 
 /* Pagination Override */
+nav.d-flex .small.text-muted {
+    display: none !important;
+}
+
 .pagination {
     --bs-pagination-bg: transparent;
     --bs-pagination-border-color: rgba(34, 211, 238, 0.2);
@@ -671,6 +675,42 @@ body {
 .page-item.disabled .page-link {
     background-color: rgba(15, 23, 42, 0.4);
     color: var(--text-muted);
+}
+
+/* Light Mode Pagination */
+[data-theme="light"] .pagination {
+    --bs-pagination-bg: #ffffff;
+    --bs-pagination-border-color: #e2e8f0;
+    --bs-pagination-color: #334155;
+    --bs-pagination-hover-bg: #f0f9ff;
+    --bs-pagination-hover-border-color: var(--accent-cyan);
+    --bs-pagination-hover-color: var(--accent-cyan);
+    --bs-pagination-focus-bg: #f0f9ff;
+    --bs-pagination-focus-color: var(--accent-cyan);
+    --bs-pagination-active-bg: var(--accent-cyan);
+    --bs-pagination-active-border-color: var(--accent-cyan);
+    --bs-pagination-active-color: #ffffff;
+    --bs-pagination-disabled-bg: #f8fafc;
+    --bs-pagination-disabled-border-color: #e2e8f0;
+    --bs-pagination-disabled-color: #94a3b8;
+}
+
+[data-theme="light"] .page-link {
+    background-color: #ffffff;
+    backdrop-filter: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .page-item.active .page-link {
+    background-color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+}
+
+[data-theme="light"] .page-item.disabled .page-link {
+    background-color: #f8fafc;
+    color: #94a3b8;
 }
 
 /* Form Select Override */
