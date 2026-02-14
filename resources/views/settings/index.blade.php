@@ -109,7 +109,7 @@
 
         <!-- Right Column: Info & Action -->
         <div class="col-lg-4">
-            <div class="glass-panel mb-4 sticky-top" style="top: 100px; z-index: 90;">
+            <div class="glass-panel">
                 <div class="p-3 border-bottom border-subtle">
                     <h6 class="m-0 text-white"><i class="fas fa-info-circle me-2 text-cyan"></i>Prinsip Kerja</h6>
                 </div>

@@ -44,7 +44,7 @@
 <div class="glass-panel glass-panel-filter mb-4 p-3">
     <form method="GET" id="historyFilterForm" class="d-flex flex-wrap align-items-center gap-3">
         <div class="d-flex align-items-center gap-2 text-secondary">
-            <span style="font-size: 13px;">Dari:</span>
+            <span style="font-size: 13px;">Tanggal:</span>
             <input type="date" name="start_date" class="form-control-glass py-1" value="{{ request('start_date') }}" style="width: 140px; font-size: 13px;">
         </div>
         
@@ -73,17 +73,17 @@
         <input type="hidden" name="status" id="input_status" value="{{ request('status') }}">
         <div class="dropdown">
             <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                @if(request('status') == 'aman') 🟢 Aman
-                @elseif(request('status') == 'siaga') 🟡 Siaga
-                @elseif(request('status') == 'bahaya') 🔴 Bahaya
+                @if(request('status') == 'aman') <i class="fas fa-check-circle me-1"></i> Aman
+                @elseif(request('status') == 'siaga') <i class="fas fa-exclamation-circle me-1"></i> Siaga
+                @elseif(request('status') == 'bahaya') <i class="fas fa-exclamation-triangle me-1"></i> Bahaya
                 @else Semua Status
                 @endif
             </button>
             <ul class="dropdown-menu dropdown-glass">
                 <li><a class="dropdown-item {{ !request('status') ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', '', 'Semua Status', this)">Semua Status</a></li>
-                <li><a class="dropdown-item {{ request('status') == 'aman' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'aman', '🟢 Aman', this)">🟢 Aman</a></li>
-                <li><a class="dropdown-item {{ request('status') == 'siaga' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'siaga', '🟡 Siaga', this)">🟡 Siaga</a></li>
-                <li><a class="dropdown-item {{ request('status') == 'bahaya' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'bahaya', '🔴 Bahaya', this)">🔴 Bahaya</a></li>
+                <li><a class="dropdown-item {{ request('status') == 'aman' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'aman', 'Aman', this)"><i class="fas fa-check-circle me-1"></i> Aman</a></li>
+                <li><a class="dropdown-item {{ request('status') == 'siaga' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'siaga', 'Siaga', this)"><i class="fas fa-exclamation-circle me-1"></i> Siaga</a></li>
+                <li><a class="dropdown-item {{ request('status') == 'bahaya' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'bahaya', 'Bahaya', this)"><i class="fas fa-exclamation-triangle me-1"></i> Bahaya</a></li>
             </ul>
         </div>
 
@@ -91,11 +91,11 @@
         <input type="hidden" name="sort" id="input_sort" value="{{ request('sort', 'desc') }}">
         <div class="dropdown">
             <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                 {{ request('sort', 'desc') == 'desc' ? '⬇️ Terbaru' : '⬆️ Terlama' }}
+                 @if(request('sort', 'desc') == 'desc') <i class="fas fa-arrow-down me-1"></i> Terbaru @else <i class="fas fa-arrow-up me-1"></i> Terlama @endif
             </button>
             <ul class="dropdown-menu dropdown-glass">
-                <li><a class="dropdown-item {{ request('sort', 'desc') == 'desc' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('sort', 'desc', '⬇️ Terbaru', this)">⬇️ Terbaru</a></li>
-                <li><a class="dropdown-item {{ request('sort') == 'asc' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('sort', 'asc', '⬆️ Terlama', this)">⬆️ Terlama</a></li>
+                <li><a class="dropdown-item {{ request('sort', 'desc') == 'desc' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('sort', 'desc', 'Terbaru', this)"><i class="fas fa-arrow-down me-1"></i> Terbaru</a></li>
+                <li><a class="dropdown-item {{ request('sort') == 'asc' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('sort', 'asc', 'Terlama', this)"><i class="fas fa-arrow-up me-1"></i> Terlama</a></li>
             </ul>
         </div>
         
@@ -124,12 +124,12 @@
         <table class="table-glass mb-0">
             <thead>
                 <tr>
-                    <th width="60">#</th>
+                    <th class="text-center">No</th>
                     <th>Waktu</th>
                     <th>Perangkat</th>
-                    <th>Jarak (cm)</th>
-                    <th>Level Air</th>
-                    <th>Status</th>
+                    <th class="text-center">Jarak (cm)</th>
+                    <th class="text-center">Level Air</th>
+                    <th class="text-center">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -145,9 +145,9 @@
                         </div>
                     </td>
                     <td>{{ $r->device->name ?? 'Unknown' }}</td>
-                    <td class="font-monospace text-secondary">{{ number_format($r->distance_cm, 1) }}</td>
-                    <td>
-                        <div class="d-flex flex-column">
+                    <td class="font-monospace text-secondary text-center">{{ number_format($r->distance_cm, 1) }}</td>
+                    <td class="text-center">
+                        <div class="d-inline-flex flex-column align-items-center">
                             <span class="fw-bold text-cyan">{{ number_format($r->water_level_cm, 1) }} cm</span>
                             <div class="progress mt-1" style="height: 4px; width: 80px; background: rgba(255,255,255,0.1);">
                                 <div class="progress-bar {{ $r->status === 'bahaya' ? 'bg-danger' : ($r->status === 'siaga' ? 'bg-warning' : 'bg-success') }}" 
@@ -155,7 +155,7 @@
                             </div>
                         </div>
                     </td>
-                    <td>
+                    <td class="text-center">
                         @if($r->status === 'aman') <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">AMAN</span>
                         @elseif($r->status === 'siaga') <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">SIAGA</span>
                         @else <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">BAHAYA</span>
@@ -199,10 +199,10 @@
         // Update button label
         const btn = el.closest('.dropdown').querySelector('.dropdown-toggle');
         if (btn) {
-            // Keep icon if exists
-            const icon = btn.querySelector('i');
-            const iconHtml = icon ? icon.outerHTML + ' ' : '';
-            btn.innerHTML = iconHtml + label + ' <span class="dropdown-toggle-arrow"></span>';
+            // Get icon from the clicked dropdown item
+            const clickedIcon = el.querySelector('i');
+            const iconHtml = clickedIcon ? clickedIcon.outerHTML + ' ' : '';
+            btn.innerHTML = iconHtml + label;
         }
         // Update active state
         el.closest('ul').querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));

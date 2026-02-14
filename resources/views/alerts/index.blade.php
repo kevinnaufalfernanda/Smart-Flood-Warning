@@ -48,17 +48,17 @@
             <input type="hidden" name="type" id="input_type" value="{{ request('type') }}">
             <div class="dropdown">
                 <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px;">
-                    @if(request('type') == 'danger') 🚨 Bahaya
-                    @elseif(request('type') == 'warning') ⚠️ Siaga
-                    @elseif(request('type') == 'info') ℹ️ Info
+                    @if(request('type') == 'danger') <i class="fas fa-exclamation-triangle me-1"></i> Bahaya
+                    @elseif(request('type') == 'warning') <i class="fas fa-exclamation-circle me-1"></i> Siaga
+                    @elseif(request('type') == 'info') <i class="fas fa-info-circle me-1"></i> Info
                     @else Semua Tipe
                     @endif
                 </button>
                 <ul class="dropdown-menu dropdown-glass">
                     <li><a class="dropdown-item {{ !request('type') ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', '', 'Semua Tipe', this)">Semua Tipe</a></li>
-                    <li><a class="dropdown-item {{ request('type') == 'danger' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'danger', '🚨 Bahaya', this)">🚨 Bahaya</a></li>
-                    <li><a class="dropdown-item {{ request('type') == 'warning' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'warning', '⚠️ Siaga', this)">⚠️ Siaga</a></li>
-                    <li><a class="dropdown-item {{ request('type') == 'info' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'info', 'ℹ️ Info', this)">ℹ️ Info</a></li>
+                    <li><a class="dropdown-item {{ request('type') == 'danger' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'danger', 'Bahaya', this)"><i class="fas fa-exclamation-triangle me-1"></i> Bahaya</a></li>
+                    <li><a class="dropdown-item {{ request('type') == 'warning' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'warning', 'Siaga', this)"><i class="fas fa-exclamation-circle me-1"></i> Siaga</a></li>
+                    <li><a class="dropdown-item {{ request('type') == 'info' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'info', 'Info', this)"><i class="fas fa-info-circle me-1"></i> Info</a></li>
                 </ul>
             </div>
 
@@ -66,8 +66,8 @@
             <input type="hidden" name="status" id="input_status" value="{{ request('status') }}">
             <div class="dropdown">
                 <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px;">
-                    @if(request('status') == 'unread') Belum Dibaca
-                    @elseif(request('status') == 'read') Sudah Dibaca
+                    @if(request('status') == 'unread') <i class="fas fa-envelope me-1"></i> Belum Dibaca
+                    @elseif(request('status') == 'read') <i class="fas fa-envelope-open me-1"></i> Sudah Dibaca
                     @else Semua Status
                     @endif
                 </button>
@@ -110,7 +110,7 @@
         <table class="table-glass mb-0">
             <thead>
                 <tr>
-                    <th width="60" class="text-center">Tipe</th>
+                    <th width="80" class="text-center" style="padding-left: 24px;">Tipe</th>
                     <th>Peringatan</th>
                     <th class="text-center">Level Air</th>
                     <th class="text-center">Waktu</th>
@@ -122,7 +122,7 @@
                 <tr style="{{ !$alert->is_read ? 'background: rgba(34, 211, 238, 0.05);' : '' }} cursor: pointer;" 
                     onclick="if(!event.target.closest('button') && !event.target.closest('a')) window.location='{{ route('alerts.show', $alert->id) }}'"
                     class="alert-row-hover">
-                    <td class="text-center">
+                    <td class="text-center" style="padding-left: 24px;">
                         <div class="d-flex align-items-center justify-content-center rounded-circle mx-auto" 
                              style="width: 32px; height: 32px; background: var(--bg-subtle); color: var(--text-secondary);">
                             @if($alert->type === 'danger') <i class="fas fa-exclamation-triangle text-danger"></i>
@@ -189,9 +189,10 @@
         // Update button label
         const btn = el.closest('.dropdown').querySelector('.dropdown-toggle');
         if (btn) {
-            const icon = btn.querySelector('i');
-            const iconHtml = icon ? icon.outerHTML + ' ' : '';
-            btn.innerHTML = iconHtml + label + ' <span class="dropdown-toggle-arrow"></span>';
+            // Get icon from the clicked dropdown item
+            const clickedIcon = el.querySelector('i');
+            const iconHtml = clickedIcon ? clickedIcon.outerHTML + ' ' : '';
+            btn.innerHTML = iconHtml + label;
         }
         // Update active state
         el.closest('ul').querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));

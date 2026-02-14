@@ -91,7 +91,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Top Navbar -->
-        <header class="top-navbar glass-panel mb-4">
+        <header class="top-navbar glass-panel mb-4" style="overflow: visible;">
             <div class="d-flex align-items-center">
                 <h4 class="m-0 text-white">@yield('title', 'Dashboard')</h4>
             </div>
@@ -104,13 +104,13 @@
                     <ul class="dropdown-menu dropdown-glass dropdown-menu-end">
                         <li>
                             <a class="dropdown-item" href="#" onclick="applyTheme('light'); return false;" id="themeOptLight">
-                                <i class="fas fa-sun text-warning me-2"></i> Terang
+                                <i class="fas fa-sun text-cyan me-2"></i> Terang
                                 <i class="fas fa-check ms-auto text-cyan" id="themeCheckLight" style="display:none;"></i>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="#" onclick="applyTheme('dark'); return false;" id="themeOptDark">
-                                <i class="fas fa-moon text-purple me-2"></i> Gelap
+                                <i class="fas fa-moon text-cyan me-2"></i> Gelap
                                 <i class="fas fa-check ms-auto text-cyan" id="themeCheckDark" style="display:none;"></i>
                             </a>
                         </li>
