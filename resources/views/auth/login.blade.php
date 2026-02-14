@@ -17,6 +17,11 @@
 
     <!-- Custom Dashboard CSS -->
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+
+    <!-- Theme Init (prevent FOUC) -->
+    <script>
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
 </head>
 <body>
     <!-- Background Decoration -->
@@ -68,7 +73,7 @@
 
                 <div class="mb-4 d-flex align-items-center justify-content-between">
                     <div class="form-check">
-                        <input class="form-check-input bg-subtle border-subtle" type="checkbox" name="remember" id="remember">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember">
                         <label class="form-check-label" for="remember" style="color: var(--text-secondary); font-size: 13px;">
                             Ingat Saya
                         </label>

@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
+    <div class="row">
+        <div class="col-12">
             <div class="d-flex align-items-center mb-4">
                 <a href="{{ route('alerts.index') }}" class="btn btn-sm btn-outline-secondary me-3 border-subtle bg-subtle text-primary">
                     <i class="fas fa-arrow-left"></i>

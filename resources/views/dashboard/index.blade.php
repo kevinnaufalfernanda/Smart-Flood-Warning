@@ -124,6 +124,7 @@
                     </div>
                     <div id="recentAlertsList" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
                         @forelse($recentAlerts as $alert)
+                        <a href="{{ route('alerts.show', $alert->id) }}" class="text-decoration-none" style="color: inherit;">
                         <div class="alert-row">
                             <div class="alert-icon-sm {{ $alert->type === 'danger' ? 'bg-danger-subtle' : ($alert->type === 'warning' ? 'bg-warning-subtle' : 'bg-cyan-subtle') }}">
                                 <i class="fas fa-{{ $alert->type === 'danger' ? 'exclamation-circle' : ($alert->type === 'warning' ? 'exclamation-triangle' : 'info-circle') }}"></i>
@@ -136,6 +137,7 @@
                                 {{ $alert->created_at->diffForHumans() }}
                             </div>
                         </div>
+                        </a>
                         @empty
                         <div class="text-center py-4 text-muted">
                             <i class="fas fa-check-circle mb-2" style="font-size: 24px; opacity: 0.3;"></i>
@@ -218,7 +220,7 @@
         data: {
             datasets: [{
                 data: [0, 100],
-                backgroundColor: [colorCyan, 'rgba(255,255,255,0.05)'],
+                backgroundColor: [colorCyan, (localStorage.getItem('theme') || 'light') === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.05)'],
                 borderWidth: 0,
                 cutout: '85%',
                 rotation: -90,
@@ -297,8 +299,10 @@
         if(percent >= 50) color = colorWarning;
         if(percent >= 75) color = colorDanger;
         
+        const currentThemeVal = document.documentElement.getAttribute('data-theme') || 'light';
+        const gaugeBgColor = currentThemeVal === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.05)';
         gaugeChart.data.datasets[0].data = [percent, 100 - percent];
-        gaugeChart.data.datasets[0].backgroundColor = [color, 'rgba(255,255,255,0.05)'];
+        gaugeChart.data.datasets[0].backgroundColor = [color, gaugeBgColor];
         gaugeChart.update();
 
         // Update Visual Tank (Removed)

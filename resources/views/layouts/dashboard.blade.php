@@ -19,6 +19,11 @@
     <!-- Custom Dashboard CSS -->
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
 
+    <!-- Theme Init (prevent FOUC) -->
+    <script>
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
+
     @stack('styles')
 </head>
 <body>
@@ -91,11 +96,26 @@
                 <h4 class="m-0 text-white">@yield('title', 'Dashboard')</h4>
             </div>
             <div class="d-flex align-items-center gap-3">
-                <!-- Theme Toggle -->
-                <button class="btn btn-link text-white p-0" onclick="toggleTheme()" title="Ganti Tema">
-                    <i class="fas fa-sun fs-5" id="themeIcon"></i>
-                </button>
-                <div class="vr bg-white opacity-25 mx-1" style="height: 20px;"></div>
+                <!-- Theme Selector Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="themeDropdownBtn">
+                        <i class="fas fa-sun me-1" id="themeIcon"></i> <span id="themeLabel">Terang</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-glass dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="applyTheme('light'); return false;" id="themeOptLight">
+                                <i class="fas fa-sun text-warning me-2"></i> Terang
+                                <i class="fas fa-check ms-auto text-cyan" id="themeCheckLight" style="display:none;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="applyTheme('dark'); return false;" id="themeOptDark">
+                                <i class="fas fa-moon text-purple me-2"></i> Gelap
+                                <i class="fas fa-check ms-auto text-cyan" id="themeCheckDark" style="display:none;"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <!-- Status System Indicator -->
                  @if(isset($latestStatus))
                     @if($latestStatus == 'aman')
@@ -164,28 +184,25 @@
             localStorage.setItem('theme', theme);
             
             const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            const checkLight = document.getElementById('themeCheckLight');
+            const checkDark = document.getElementById('themeCheckDark');
+
             if(icon) {
                 if(theme === 'light') {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    icon.classList.remove('text-white');
-                    icon.classList.add('text-dark');
+                    icon.className = 'fas fa-sun me-1';
+                    if(label) label.textContent = 'Terang';
                 } else {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    icon.classList.add('text-white');
-                    icon.classList.remove('text-dark');
+                    icon.className = 'fas fa-moon me-1';
+                    if(label) label.textContent = 'Gelap';
                 }
             }
+
+            if(checkLight) checkLight.style.display = theme === 'light' ? 'inline' : 'none';
+            if(checkDark) checkDark.style.display = theme === 'dark' ? 'inline' : 'none';
             
             // Dispatch event for charts
             window.dispatchEvent(new CustomEvent('themeChanged', { detail: theme }));
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
-            const next = current === 'dark' ? 'light' : 'dark';
-            applyTheme(next);
         }
 
         // Init Theme
