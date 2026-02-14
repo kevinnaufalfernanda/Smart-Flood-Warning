@@ -32,6 +32,17 @@ class AlertController extends Controller
         return view('alerts.index', compact('alerts', 'totalUnread', 'dangerCount', 'warningCount'));
     }
 
+    public function show($id)
+    {
+        $alert = Alert::findOrFail($id);
+
+        if (!$alert->is_read) {
+            $alert->update(['is_read' => true]);
+        }
+
+        return view('alerts.show', compact('alert'));
+    }
+
     public function markAsRead($id)
     {
         Alert::findOrFail($id)->update(['is_read' => true]);

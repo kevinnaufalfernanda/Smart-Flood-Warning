@@ -41,20 +41,65 @@
 </div>
 
 <!-- Filter Bar -->
-<div class="glass-panel mb-4 p-3">
-    <form method="GET" class="d-flex flex-wrap align-items-center gap-3">
+<div class="glass-panel glass-panel-filter mb-4 p-3">
+    <form method="GET" id="historyFilterForm" class="d-flex flex-wrap align-items-center gap-3">
         <div class="d-flex align-items-center gap-2 text-secondary">
-            <i class="fas fa-calendar"></i>
-            <input type="date" name="date" class="form-control-glass py-1" value="{{ request('date') }}" style="width: 140px; font-size: 13px;">
+            <span style="font-size: 13px;">Dari:</span>
+            <input type="date" name="start_date" class="form-control-glass py-1" value="{{ request('start_date') }}" style="width: 140px; font-size: 13px;">
         </div>
-        <select name="status" class="form-control-glass py-1" style="width: 150px; font-size: 13px;">
-            <option value="">Semua Status</option>
-            <option value="aman" {{ request('status') === 'aman' ? 'selected' : '' }}>🟢 Aman</option>
-            <option value="siaga" {{ request('status') === 'siaga' ? 'selected' : '' }}>🟡 Siaga</option>
-            <option value="bahaya" {{ request('status') === 'bahaya' ? 'selected' : '' }}>🔴 Bahaya</option>
-        </select>
         
-        @if(request()->hasAny(['date', 'status']))
+        <!-- Device Filter -->
+        <div class="d-flex align-items-center gap-2 text-secondary">
+            <span style="font-size: 13px;">Perangkat:</span>
+            <input type="hidden" name="device_id" id="input_device_id" value="{{ request('device_id') }}">
+            <div class="dropdown">
+                <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if(request('device_id'))
+                        {{ $devices->firstWhere('id', request('device_id'))?->name ?? 'Semua Perangkat' }}
+                    @else
+                        Semua Perangkat
+                    @endif
+                </button>
+                <ul class="dropdown-menu dropdown-glass">
+                    <li><a class="dropdown-item {{ !request('device_id') ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('device_id', '', 'Semua Perangkat', this)">Semua Perangkat</a></li>
+                    @foreach($devices as $device)
+                    <li><a class="dropdown-item {{ request('device_id') == $device->id ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('device_id', '{{ $device->id }}', '{{ $device->name }}', this)">{{ $device->name }}</a></li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+
+        <!-- Status Filter -->
+        <input type="hidden" name="status" id="input_status" value="{{ request('status') }}">
+        <div class="dropdown">
+            <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @if(request('status') == 'aman') 🟢 Aman
+                @elseif(request('status') == 'siaga') 🟡 Siaga
+                @elseif(request('status') == 'bahaya') 🔴 Bahaya
+                @else Semua Status
+                @endif
+            </button>
+            <ul class="dropdown-menu dropdown-glass">
+                <li><a class="dropdown-item {{ !request('status') ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', '', 'Semua Status', this)">Semua Status</a></li>
+                <li><a class="dropdown-item {{ request('status') == 'aman' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'aman', '🟢 Aman', this)">🟢 Aman</a></li>
+                <li><a class="dropdown-item {{ request('status') == 'siaga' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'siaga', '🟡 Siaga', this)">🟡 Siaga</a></li>
+                <li><a class="dropdown-item {{ request('status') == 'bahaya' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'bahaya', '🔴 Bahaya', this)">🔴 Bahaya</a></li>
+            </ul>
+        </div>
+
+        <!-- Sort Filter -->
+        <input type="hidden" name="sort" id="input_sort" value="{{ request('sort', 'desc') }}">
+        <div class="dropdown">
+            <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                 {{ request('sort', 'desc') == 'desc' ? '⬇️ Terbaru' : '⬆️ Terlama' }}
+            </button>
+            <ul class="dropdown-menu dropdown-glass">
+                <li><a class="dropdown-item {{ request('sort', 'desc') == 'desc' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('sort', 'desc', '⬇️ Terbaru', this)">⬇️ Terbaru</a></li>
+                <li><a class="dropdown-item {{ request('sort') == 'asc' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('sort', 'asc', '⬆️ Terlama', this)">⬆️ Terlama</a></li>
+            </ul>
+        </div>
+        
+        @if(request()->hasAny(['start_date', 'end_date', 'status', 'sort']))
             <a href="{{ route('history.index') }}" class="btn btn-sm btn-outline-secondary border-0 ms-auto">
                 <i class="fas fa-times me-1"></i> Reset
             </a>
@@ -71,9 +116,9 @@
 
 <!-- Data Table -->
 <div class="glass-panel overflow-hidden">
-    <div class="px-4 py-3 border-bottom border-white border-opacity-10 d-flex justify-content-between align-items-center">
+    <div class="px-4 py-3 border-bottom border-subtle d-flex justify-content-between align-items-center">
         <h6 class="m-0 text-white"><i class="fas fa-table me-2 text-primary"></i>Log Pembacaan Sensor</h6>
-        <span class="badge bg-white bg-opacity-10 text-secondary fw-normal">Total: {{ $readings->total() }}</span>
+        <span class="badge bg-subtle text-secondary fw-normal">Total: {{ $readings->total() }}</span>
     </div>
     <div class="table-responsive">
         <table class="table-glass mb-0">
@@ -135,3 +180,23 @@
     {{ $readings->withQueryString()->links('pagination::bootstrap-5') }}
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function setFilter(name, value, label, el) {
+        // Update hidden input
+        document.getElementById('input_' + name).value = value;
+        // Update button label
+        const btn = el.closest('.dropdown').querySelector('.dropdown-toggle');
+        if (btn) {
+            // Keep icon if exists
+            const icon = btn.querySelector('i');
+            const iconHtml = icon ? icon.outerHTML + ' ' : '';
+            btn.innerHTML = iconHtml + label + ' <span class="dropdown-toggle-arrow"></span>';
+        }
+        // Update active state
+        el.closest('ul').querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
+        el.classList.add('active');
+    }
+</script>
+@endpush

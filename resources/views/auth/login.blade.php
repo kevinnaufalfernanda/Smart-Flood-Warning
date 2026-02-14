@@ -37,8 +37,8 @@
             </div>
 
             @if($errors->any())
-                <div class="mb-3 p-3" style="background: var(--status-danger-bg); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 10px;">
-                    <div style="color: var(--status-danger); font-size: 13px;">
+                <div class="mb-3 p-3 bg-danger-subtle border border-danger-subtle rounded-3">
+                    <div style="font-size: 13px;">
                         <i class="fas fa-exclamation-circle me-1"></i>
                         @foreach($errors->all() as $error)
                             {{ $error }}
@@ -68,8 +68,7 @@
 
                 <div class="mb-4 d-flex align-items-center justify-content-between">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                               style="background-color: rgba(255,255,255,0.1); border-color: var(--border-glass);">
+                        <input class="form-check-input bg-subtle border-subtle" type="checkbox" name="remember" id="remember">
                         <label class="form-check-label" for="remember" style="color: var(--text-secondary); font-size: 13px;">
                             Ingat Saya
                         </label>

@@ -41,21 +41,58 @@
 </div>
 
 <!-- Filter & Actions -->
-<div class="glass-panel mb-4 p-3">
+<div class="glass-panel glass-panel-filter mb-4 p-3">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-        <form method="GET" class="d-flex gap-2">
-            <select name="type" class="form-control-glass py-1" style="width: 140px; font-size: 13px;" onchange="this.form.submit()">
-                <option value="">Semua Tipe</option>
-                <option value="danger" {{ request('type') === 'danger' ? 'selected' : '' }}>🚨 Bahaya</option>
-                <option value="warning" {{ request('type') === 'warning' ? 'selected' : '' }}>⚠️ Siaga</option>
-                <option value="info" {{ request('type') === 'info' ? 'selected' : '' }}>ℹ️ Info</option>
-            </select>
-            <select name="status" class="form-control-glass py-1" style="width: 140px; font-size: 13px;" onchange="this.form.submit()">
-                <option value="">Semua Status</option>
-                <option value="unread" {{ request('status') === 'unread' ? 'selected' : '' }}>Belum Dibaca</option>
-                <option value="read" {{ request('status') === 'read' ? 'selected' : '' }}>Sudah Dibaca</option>
-            </select>
+        <form method="GET" id="alertsFilterForm" class="d-flex flex-wrap align-items-center gap-3 flex-grow-1">
+            <!-- Type Filter -->
+            <input type="hidden" name="type" id="input_type" value="{{ request('type') }}">
+            <div class="dropdown">
+                <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px;">
+                    @if(request('type') == 'danger') 🚨 Bahaya
+                    @elseif(request('type') == 'warning') ⚠️ Siaga
+                    @elseif(request('type') == 'info') ℹ️ Info
+                    @else Semua Tipe
+                    @endif
+                </button>
+                <ul class="dropdown-menu dropdown-glass">
+                    <li><a class="dropdown-item {{ !request('type') ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', '', 'Semua Tipe', this)">Semua Tipe</a></li>
+                    <li><a class="dropdown-item {{ request('type') == 'danger' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'danger', '🚨 Bahaya', this)">🚨 Bahaya</a></li>
+                    <li><a class="dropdown-item {{ request('type') == 'warning' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'warning', '⚠️ Siaga', this)">⚠️ Siaga</a></li>
+                    <li><a class="dropdown-item {{ request('type') == 'info' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('type', 'info', 'ℹ️ Info', this)">ℹ️ Info</a></li>
+                </ul>
+            </div>
+
+            <!-- Status Filter -->
+            <input type="hidden" name="status" id="input_status" value="{{ request('status') }}">
+            <div class="dropdown">
+                <button class="btn btn-glass dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px;">
+                    @if(request('status') == 'unread') Belum Dibaca
+                    @elseif(request('status') == 'read') Sudah Dibaca
+                    @else Semua Status
+                    @endif
+                </button>
+                <ul class="dropdown-menu dropdown-glass">
+                    <li><a class="dropdown-item {{ !request('status') ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', '', 'Semua Status', this)">Semua Status</a></li>
+                    <li><a class="dropdown-item {{ request('status') == 'unread' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'unread', 'Belum Dibaca', this)">Belum Dibaca</a></li>
+                    <li><a class="dropdown-item {{ request('status') == 'read' ? 'active' : '' }}" href="#" onclick="event.preventDefault(); setFilter('status', 'read', 'Sudah Dibaca', this)">Sudah Dibaca</a></li>
+                </ul>
+            </div>
+
+            <!-- Filter & Reset Buttons -->
+            @if(request()->hasAny(['type', 'status']))
+                <a href="{{ route('alerts.index') }}" class="btn btn-sm btn-outline-secondary border-0 ms-auto">
+                    <i class="fas fa-times me-1"></i> Reset
+                </a>
+                <button type="submit" class="btn btn-sm btn-cyber">
+                    <i class="fas fa-filter me-1"></i> Filter
+                </button>
+            @else
+                <button type="submit" class="btn btn-sm btn-cyber ms-auto">
+                    <i class="fas fa-filter me-1"></i> Filter
+                </button>
+            @endif
         </form>
+
         @if($totalUnread > 0)
         <form method="POST" action="{{ route('alerts.readAll') }}">
             @csrf
@@ -73,20 +110,21 @@
         <table class="table-glass mb-0">
             <thead>
                 <tr>
-                    <th width="50">#</th>
+                    <th width="60" class="text-center">Tipe</th>
                     <th>Peringatan</th>
-                    <th>Level Air</th>
-                    <th>Waktu</th>
-                    <th>Status</th>
-                    <th width="80" class="text-end">Aksi</th>
+                    <th class="text-center">Level Air</th>
+                    <th class="text-center">Waktu</th>
+                    <th class="text-center">Status</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($alerts as $alert)
-                <tr style="{{ !$alert->is_read ? 'background: rgba(34, 211, 238, 0.05);' : '' }}">
-                    <td>
-                        <div class="d-flex align-items-center justify-content-center rounded-circle" 
-                             style="width: 32px; height: 32px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">
+                <tr style="{{ !$alert->is_read ? 'background: rgba(34, 211, 238, 0.05);' : '' }} cursor: pointer;" 
+                    onclick="if(!event.target.closest('button') && !event.target.closest('a')) window.location='{{ route('alerts.show', $alert->id) }}'"
+                    class="alert-row-hover">
+                    <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle mx-auto" 
+                             style="width: 32px; height: 32px; background: var(--bg-subtle); color: var(--text-secondary);">
                             @if($alert->type === 'danger') <i class="fas fa-exclamation-triangle text-danger"></i>
                             @elseif($alert->type === 'warning') <i class="fas fa-exclamation-circle text-warning"></i>
                             @else <i class="fas fa-info-circle text-cyan"></i>
@@ -94,41 +132,38 @@
                         </div>
                     </td>
                     <td>
-                        <strong class="d-block text-white" style="font-size: 14px;">{{ $alert->title }}</strong>
-                        <small class="text-secondary">{{ Str::limit($alert->message, 80) }}</small>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <strong class="d-block" style="font-size: 14px;">
+                                <span class="text-white text-decoration-none hover-underline">
+                                    {{ $alert->title }}
+                                </span>
+                            </strong>
+                            <small class="text-secondary ms-2 d-md-none">{{ $alert->created_at->format('H:i') }}</small>
+                        </div>
+                        <small class="text-secondary d-block">{{ Str::limit($alert->message, 80) }}</small>
                     </td>
-                    <td>
+                    <td class="text-center">
                         @if($alert->water_level)
                             <span class="fw-bold text-cyan">{{ number_format($alert->water_level, 1) }} cm</span>
                         @else
                             <span class="text-muted">—</span>
                         @endif
                     </td>
-                    <td style="font-size: 13px;">
-                        <span class="d-block text-white">{{ $alert->created_at->format('d M Y') }}</span>
-                        <span class="text-muted">{{ $alert->created_at->format('H:i') }}</span>
+                    <td class="text-center" style="font-size: 13px;">
+                        <span class="d-block text-white fw-bold">{{ $alert->created_at->format('d M Y') }}</span>
+                        <span class="text-secondary opacity-75" style="font-size: 12px;">{{ $alert->created_at->format('H:i') }} WIB</span>
                     </td>
-                    <td>
+                    <td class="text-center">
                         @if($alert->is_read)
                             <span class="badge bg-secondary bg-opacity-25 text-secondary fw-normal">Dibaca</span>
                         @else
                             <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">BARU</span>
                         @endif
                     </td>
-                    <td class="text-end">
-                        @if(!$alert->is_read)
-                        <form method="POST" action="{{ route('alerts.read', $alert->id) }}">
-                            @csrf
-                            <button type="submit" class="btn btn-sm btn-link text-success p-0" title="Tandai Dibaca">
-                                <i class="fas fa-check-circle fa-lg"></i>
-                            </button>
-                        </form>
-                        @endif
-                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center py-5">
+                    <td colspan="5" class="text-center py-5">
                         <i class="fas fa-check-circle mb-3 text-success" style="font-size: 48px; opacity: 0.5;"></i>
                         <h5 class="text-white">Tidak Ada Peringatan</h5>
                         <p class="text-secondary">Sistem berjalan normal.</p>
@@ -145,3 +180,22 @@
     {{ $alerts->withQueryString()->links('pagination::bootstrap-5') }}
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function setFilter(name, value, label, el) {
+        // Update hidden input
+        document.getElementById('input_' + name).value = value;
+        // Update button label
+        const btn = el.closest('.dropdown').querySelector('.dropdown-toggle');
+        if (btn) {
+            const icon = btn.querySelector('i');
+            const iconHtml = icon ? icon.outerHTML + ' ' : '';
+            btn.innerHTML = iconHtml + label + ' <span class="dropdown-toggle-arrow"></span>';
+        }
+        // Update active state
+        el.closest('ul').querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
+        el.classList.add('active');
+    }
+</script>
+@endpush

@@ -68,24 +68,24 @@
 
             <!-- Latest Reading -->
             @if($device->latestReading)
-            <div class="p-3 rounded-3" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+            <div class="p-3 rounded-3 bg-themed-subtle border border-subtle">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <small class="text-muted text-uppercase fw-bold" style="font-size: 10px;">Status Terkini</small>
+                    <small class="text-secondary text-uppercase fw-bold" style="font-size: 10px;">Status Terkini</small>
                     <span class="fw-bold {{ $device->latestReading->status == 'bahaya' ? 'text-danger' : ($device->latestReading->status == 'siaga' ? 'text-warning' : 'text-success') }}" style="font-size: 11px;">
                         {{ strtoupper($device->latestReading->status) }}
                     </span>
                 </div>
                 <div class="row text-center g-2">
                     <div class="col-6">
-                        <div class="p-2 rounded bg-opacity-10 bg-white">
+                        <div class="p-2 rounded bg-themed-subtle border border-subtle">
                             <div class="text-cyan fw-bold fs-5">{{ number_format($device->latestReading->water_level_cm, 1) }}</div>
-                            <small class="text-muted" style="font-size: 10px;">Level (cm)</small>
+                            <small class="text-secondary" style="font-size: 10px;">Level (cm)</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="p-2 rounded bg-opacity-10 bg-white">
-                            <div class="text-white fw-bold fs-5">{{ number_format($device->latestReading->distance_cm, 1) }}</div>
-                            <small class="text-muted" style="font-size: 10px;">Jarak (cm)</small>
+                        <div class="p-2 rounded bg-themed-subtle border border-subtle">
+                            <div class="text-primary fw-bold fs-5">{{ number_format($device->latestReading->distance_cm, 1) }}</div>
+                            <small class="text-secondary" style="font-size: 10px;">Jarak (cm)</small>
                         </div>
                     </div>
                 </div>

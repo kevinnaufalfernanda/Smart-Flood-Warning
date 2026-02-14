@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — Smart Flood Warning</title>
+    <title>@yield('title', 'Dashboard') — FloodGuard</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
                 <i class="fas fa-water"></i>
             </div>
             <div class="brand-text">
-                <h5>IoT Banjir</h5>
+                <h5>FloodGuard</h5>
                 <small class="text-secondary">Admin Panel</small>
             </div>
         </div>
@@ -91,6 +91,11 @@
                 <h4 class="m-0 text-white">@yield('title', 'Dashboard')</h4>
             </div>
             <div class="d-flex align-items-center gap-3">
+                <!-- Theme Toggle -->
+                <button class="btn btn-link text-white p-0" onclick="toggleTheme()" title="Ganti Tema">
+                    <i class="fas fa-sun fs-5" id="themeIcon"></i>
+                </button>
+                <div class="vr bg-white opacity-25 mx-1" style="height: 20px;"></div>
                 <!-- Status System Indicator -->
                  @if(isset($latestStatus))
                     @if($latestStatus == 'aman')
@@ -152,6 +157,62 @@
             const toast = new bootstrap.Toast(toastEl);
             toast.show();
         }
+
+        // Theme Logic
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            const icon = document.getElementById('themeIcon');
+            if(icon) {
+                if(theme === 'light') {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    icon.classList.remove('text-white');
+                    icon.classList.add('text-dark');
+                } else {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    icon.classList.add('text-white');
+                    icon.classList.remove('text-dark');
+                }
+            }
+            
+            // Dispatch event for charts
+            window.dispatchEvent(new CustomEvent('themeChanged', { detail: theme }));
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+        }
+
+        // Init Theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+    </script>
+
+    {{-- Smooth Dropdown Close Animation --}}
+    <script>
+        document.addEventListener('hide.bs.dropdown', function(e) {
+            const menu = e.target.querySelector('.dropdown-menu.dropdown-glass');
+            if (menu) {
+                e.preventDefault();
+                menu.classList.add('dropdown-closing');
+                menu.addEventListener('animationend', function handler() {
+                    menu.classList.remove('dropdown-closing');
+                    menu.classList.remove('show');
+                    e.target.classList.remove('show');
+                    const toggle = e.target.querySelector('[data-bs-toggle="dropdown"]');
+                    if (toggle) {
+                        toggle.classList.remove('show');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    }
+                    menu.removeEventListener('animationend', handler);
+                }, { once: true });
+            }
+        });
     </script>
     @stack('scripts')
 </body>

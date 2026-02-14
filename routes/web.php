@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
     // Alerts
     Route::get('/alerts', [AlertController::class, 'index'])->name('alerts.index');
+    Route::get('/alerts/{id}', [AlertController::class, 'show'])->name('alerts.show');
     Route::post('/alerts/{id}/read', [AlertController::class, 'markAsRead'])->name('alerts.read');
     Route::post('/alerts/read-all', [AlertController::class, 'markAllAsRead'])->name('alerts.readAll');
 
