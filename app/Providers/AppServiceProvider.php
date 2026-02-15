@@ -23,12 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer('layouts.dashboard', function ($view) {
             $latest = SensorReading::latest()->first();
-            $statusMap = [
-                'aman' => 'safe',
-                'siaga' => 'warning',
-                'bahaya' => 'danger',
-            ];
-            $view->with('latestStatus', $statusMap[$latest->status ?? 'aman'] ?? 'safe');
+            $view->with('latestStatus', $latest->status ?? 'aman');
         });
     }
 }

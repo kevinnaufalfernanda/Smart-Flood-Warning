@@ -96,7 +96,7 @@
             <div class="col-12">
                 <div class="glass-panel p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3 px-2">
-                        <h6 class="m-0 text-white"><i class="fas fa-chart-area me-2 text-purple"></i>Tren Ketinggian Air (24 Jam)</h6>
+                        <h6 class="m-0 text-white"><i class="fas fa-chart-area me-2 text-cyan"></i>Tren Ketinggian Air (24 Jam)</h6>
                         <div class="dropdown">
                             <button class="btn btn-glass dropdown-toggle" type="button" id="timeframeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="far fa-clock text-cyan"></i> <span id="timeframeLabel">24 Jam</span>
@@ -119,7 +119,7 @@
             <div class="col-12">
                 <div class="glass-panel p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3 px-2">
-                        <h6 class="m-0 text-white"><i class="fas fa-triangle-exclamation me-2 text-warning"></i>Peringatan Terkini</h6>
+                        <h6 class="m-0 text-white"><i class="fas fa-triangle-exclamation me-2 text-cyan"></i>Peringatan Terkini</h6>
                         <a href="{{ route('alerts.index') }}" class="btn btn-sm btn-link text-secondary text-decoration-none" style="font-size: 12px;">Lihat Semua <i class="fas fa-arrow-right ms-1"></i></a>
                     </div>
                     <div id="recentAlertsList" style="max-height: 200px; overflow-y: auto; overflow-x: hidden;">
@@ -272,8 +272,8 @@
                 }
             },
             scales: {
-                x: { grid: { display: false, drawBorder: false }, ticks: { color: '#6e7681' } },
-                y: { grid: { color: 'rgba(255,255,255,0.05)', borderDash: [5, 5] }, ticks: { color: '#6e7681' }, min: 0 }
+                x: { grid: { display: false, drawBorder: false }, ticks: { color: '#6e7681', maxRotation: 0, autoSkipPadding: 20 } },
+                y: { grid: { color: 'rgba(255,255,255,0.05)', borderDash: [5, 5] }, ticks: { color: '#6e7681', stepSize: 1, precision: 0 }, min: 0 }
             }
         }
     });

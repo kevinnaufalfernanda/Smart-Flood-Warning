@@ -118,20 +118,24 @@
                 </div>
                 <!-- Status System Indicator -->
                  @if(isset($latestStatus))
-                    @if($latestStatus == 'aman')
-                        <div class="status-badge">
-                            <i class="fas fa-check-circle"></i> Aman
+                    @if($latestStatus == 'bahaya')
+                         <div class="status-badge danger">
+                            <i class="fas fa-exclamation-circle"></i> Bahaya
                         </div>
                     @elseif($latestStatus == 'siaga')
                          <div class="status-badge warning">
                             <i class="fas fa-exclamation-triangle"></i> Siaga
                         </div>
                     @else
-                         <div class="status-badge danger">
-                            <i class="fas fa-exclamation-circle"></i> Bahaya
+                        <div class="status-badge">
+                            <i class="fas fa-check-circle"></i> Aman
                         </div>
+                    @endif
+                @else
+                    <div class="status-badge">
+                        <i class="fas fa-check-circle"></i> Aman
+                    </div>
                 @endif
-            @endif
             </div>
         </header>
 

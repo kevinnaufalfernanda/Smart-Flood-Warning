@@ -113,21 +113,21 @@
         <div class="row">
             <div class="col-md-6">
                 <h6 class="text-cyan mb-3">Topologi Koneksi</h6>
-                <ul class="text-secondary" style="font-size: 13px; line-height: 2;">
-                    <li>1️⃣ Sensor HC-SR04 → NodeMCU ESP8266</li>
-                    <li>2️⃣ NodeMCU → WiFi Hotspot HP/Router</li>
-                    <li>3️⃣ Laptop (server) ← WiFi yang sama</li>
-                    <li>4️⃣ NodeMCU POST ke <code class="text-cyan">http://[IP_LAPTOP]:8000/api/sensor</code></li>
-                </ul>
+                <ol class="text-secondary ps-3" style="font-size: 13px; line-height: 2.2;">
+                    <li>Sensor HC-SR04 → NodeMCU ESP8266</li>
+                    <li>NodeMCU → WiFi Hotspot HP/Router</li>
+                    <li>Laptop (server) ← WiFi yang sama</li>
+                    <li>NodeMCU POST ke <code class="text-cyan">http://[IP_LAPTOP]:8000/api/sensor</code></li>
+                </ol>
             </div>
             <div class="col-md-6">
                 <h6 class="text-cyan mb-3">Wiring HC-SR04</h6>
-                <ul class="text-secondary" style="font-size: 13px; line-height: 2;">
-                    <li>🔴 VCC → 5V (NodeMCU VIN)</li>
-                    <li>⚫ GND → GND</li>
-                    <li>🟡 TRIG → D1 (GPIO5)</li>
-                    <li>🟢 ECHO → D2 (GPIO4) via Voltage Divider</li>
-                </ul>
+                <table class="text-secondary" style="font-size: 13px; line-height: 2.2;">
+                    <tr><td class="pe-3 fw-bold">VCC</td><td>→ 5V (NodeMCU VIN)</td></tr>
+                    <tr><td class="pe-3 fw-bold">GND</td><td>→ GND</td></tr>
+                    <tr><td class="pe-3 fw-bold">TRIG</td><td>→ D1 (GPIO5)</td></tr>
+                    <tr><td class="pe-3 fw-bold">ECHO</td><td>→ D2 (GPIO4) via Voltage Divider</td></tr>
+                </table>
             </div>
         </div>
     </div>
