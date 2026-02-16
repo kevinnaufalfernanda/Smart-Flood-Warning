@@ -9,14 +9,15 @@ use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root to login
-Route::get('/', function () {
-    return redirect('/login');
-});
-
 // Auth Routes
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Redirect /login to /
+Route::get('/login', function () {
+    return redirect('/');
+});
 
 // Protected Routes
 Route::middleware('auth')->group(function () {
