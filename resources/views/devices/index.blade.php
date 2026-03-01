@@ -45,8 +45,13 @@
                         <small class="text-secondary"><i class="fas fa-map-marker-alt me-1"></i> {{ $device->location ?? 'Lokasi tidak diatur' }}</small>
                     </div>
                 </div>
-                <div class="status-badge {{ $device->is_online ? 'success' : 'danger' }} px-2 py-1" style="font-size: 10px;">
-                    {{ $device->is_online ? 'ONLINE' : 'OFFLINE' }}
+                <div class="d-flex align-items-center gap-2">
+                    <div class="status-badge {{ $device->is_online ? 'success' : 'danger' }} px-2 py-1" style="font-size: 10px;">
+                        {{ $device->is_online ? 'ONLINE' : 'OFFLINE' }}
+                    </div>
+                    <button class="btn btn-sm text-cyan p-1 lh-1" data-bs-toggle="modal" data-bs-target="#editDeviceModal{{ $device->id }}" title="Edit Perangkat" style="background: rgba(34, 211, 238, 0.1); border-radius: 6px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-pen" style="font-size: 10px;"></i>
+                    </button>
                 </div>
             </div>
 
@@ -132,4 +137,39 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Modals -->
+@foreach($devices as $device)
+<div class="modal fade" id="editDeviceModal{{ $device->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-panel border-0 shadow">
+            <div class="modal-header border-bottom py-3">
+                <h5 class="modal-title fs-6"><i class="fas fa-pen text-cyan me-2"></i>Edit Pengaturan Perangkat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="font-size: 12px;"></button>
+            </div>
+            <form action="{{ route('devices.update', $device->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small mb-1">Nama Sensor</label>
+                        <input type="text" name="name" class="form-control" 
+                               value="{{ $device->name }}" required placeholder="Contoh: Sensor Utama - Node1">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label text-secondary small mb-1">Nama Lokasi</label>
+                        <input type="text" name="location" class="form-control" 
+                               value="{{ $device->location }}" placeholder="Contoh: Sungai Ciliwung KM 5">
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-sm btn-primary border-0" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection
+

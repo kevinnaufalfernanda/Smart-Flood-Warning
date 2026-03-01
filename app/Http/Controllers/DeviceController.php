@@ -18,4 +18,16 @@ class DeviceController extends Controller
 
         return view('devices.index', compact('devices', 'onlineCount', 'totalCount'));
     }
+
+    public function update(Request $request, Device $device)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
+        ]);
+
+        $device->update($validated);
+
+        return redirect()->route('devices.index')->with('success', 'Perangkat berhasil diperbarui.');
+    }
 }

@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
     // Devices
     Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
+    Route::put('/devices/{device}', [DeviceController::class, 'update'])->name('devices.update');
 
     // History
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
